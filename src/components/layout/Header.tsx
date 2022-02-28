@@ -6,7 +6,7 @@ import { UserIcon } from './Icons';
 const Header: React.FC = () => {
   return (
     <header>
-      <Navbar bg='dark' variant='dark' expand='md'>
+      <Navbar bg='primary' variant='dark' expand='md'>
         <Container>
           <Navbar.Brand
             as={Link}
@@ -18,13 +18,13 @@ const Header: React.FC = () => {
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>
-              <Nav.Link as={Link} to='/'>
+              <Nav.Link className='text-white' as={Link} to='/'>
                 Inicio
               </Nav.Link>
-              <Nav.Link as={Link} to='/cadastro'>
+              <Nav.Link className='text-white' as={Link} to='/cadastro'>
                 Cadastro
               </Nav.Link>
-              <Nav.Link as={Link} to='/sobre'>
+              <Nav.Link className='text-white' as={Link} to='/sobre'>
                 Sobre
               </Nav.Link>
             </Nav>

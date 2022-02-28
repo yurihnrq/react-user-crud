@@ -1,20 +1,20 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import User from '../core/User';
+import { cpfMask } from '../static/inputMask';
 
 interface UsersTableProps {
-  users: User[]
+  users: User[];
 }
 
-const UsersTable: React.FC<UsersTableProps> = ({users}) => {
+const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
   return (
     <Table
       striped
       bordered
       hover
       responsive
-      variant='dark'
-      className='rounded-3 overflow-auto'
+      variant='light'
     >
       <thead>
         <tr>
@@ -31,7 +31,7 @@ const UsersTable: React.FC<UsersTableProps> = ({users}) => {
           return (
             <tr key={user.id}>
               <td>{user.name}</td>
-              <td>{user.cpf}</td>
+              <td>{cpfMask(user.cpf)}</td>
               <td>{user.phone}</td>
               <td>{user.email}</td>
               <td>{user.address}</td>

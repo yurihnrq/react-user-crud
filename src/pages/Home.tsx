@@ -7,7 +7,11 @@ import User from '../core/User';
 const Home: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [info, setInfo] = useState<string>('');
+  const [info, setInfo] = useState<string>(() => {
+    const storedValue = localStorage.getItem('userInfo');
+    if (storedValue) return storedValue;
+    return '';
+  });
 
   useEffect(() => {
     if (info.length > 2) {
@@ -20,12 +24,13 @@ const Home: React.FC = () => {
         })
         .then(data => setUsers(data))
         .catch(reason => setError(reason.message));
+      localStorage.setItem('userInfo', info);
     }
   }, [info]);
 
   return (
-    <Layout width={700}>
-      <Form>
+    <Layout>
+      <Form style={{ maxWidth: 700 }} className='mx-auto'>
         <Form.Group className='mb-3'>
           <Form.Label>Pesquise por um usuário</Form.Label>
           <Form.Control
@@ -36,13 +41,13 @@ const Home: React.FC = () => {
           />
         </Form.Group>
       </Form>
-      {error !== null ? (
-        <Alert variant='danger'>{error}</Alert>
-      ) : null}
+      {error !== null ? <Alert variant='danger'>{error}</Alert> : null}
       {users.length > 0 ? (
         <UsersTable users={users} />
       ) : (
-        <span>Insira uma informação válida no campo acima. ⬆️</span>
+        <span style={{ maxWidth: 700 }} className='mx-auto d-block'>
+          Insira uma informação válida no campo acima. ⬆️
+        </span>
       )}
     </Layout>
   );
