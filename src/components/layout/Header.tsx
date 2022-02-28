@@ -27,9 +27,6 @@ const Header: React.FC = () => {
               <Nav.Link as={Link} to='/sobre'>
                 Sobre
               </Nav.Link>
-              <Nav.Link as={Link} to='/teste'>
-                Teste
-              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

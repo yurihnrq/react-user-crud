@@ -24,7 +24,6 @@ const Footer: React.FC = () => {
             <Link to='/'>Inicio</Link>
             <Link to='/cadastro'>Cadastro</Link>
             <Link to='/sobre'>Sobre</Link>
-            <Link to='/teste'>Teste</Link>
           </Col>
         </Row>
       </Container>
