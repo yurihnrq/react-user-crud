@@ -1,21 +1,17 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import User from '../core/User';
-import { cpfMask } from '../static/inputMask';
+import { cpfMask, phoneMask } from '../static/inputMask';
 
 interface UsersTableProps {
   users: User[];
+  exclusionHandler: (id: number) => void;
 }
 
-const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
+const UsersTable: React.FC<UsersTableProps> = ({ users, exclusionHandler }) => {
   return (
-    <Table
-      striped
-      bordered
-      hover
-      responsive
-      variant='light'
-    >
+    <Table striped hover responsive variant='light'>
       <thead>
         <tr>
           <th>Nome</th>
@@ -24,6 +20,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
           <th>Email</th>
           <th>Endereço</th>
           <th>Observação</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -32,10 +29,26 @@ const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
             <tr key={user.id}>
               <td>{user.name}</td>
               <td>{cpfMask(user.cpf)}</td>
-              <td>{user.phone}</td>
+              <td>{phoneMask(user.phone)}</td>
               <td>{user.email}</td>
               <td>{user.address}</td>
               <td>{user.note}</td>
+              <td>
+                <Button className='w-full me-1 d-inline-block'>
+                  <Link
+                    to={`/alterar/${user.id}`}
+                    className='text-white text-decoration-none'
+                  >
+                    Alterar
+                  </Link>
+                </Button>
+                <Button
+                  variant='danger'
+                  onClick={() => exclusionHandler(user.id)}
+                >
+                  Excluir
+                </Button>
+              </td>
             </tr>
           );
         })}

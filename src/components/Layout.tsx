@@ -11,7 +11,8 @@ const Layout: React.FC<LayoutProps> = ({ children, width }) => {
   return (
     <Container
       fluid
-      className='p-0 min-vh-100 bg-white position-relative'
+      className='p-0 min-vh-100 position-relative'
+      style={{ backgroundColor: '#f8f9fa' }}
     >
       <Header />
       <Container

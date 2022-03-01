@@ -4,6 +4,7 @@ import Page404 from '../pages/404';
 import About from '../pages/About';
 import Home from '../pages/Home';
 import Signup from '../pages/Signup';
+import Update from '../pages/Update';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/cadastro' element={<Signup />} />
+          <Route path='/alterar/:id' element={<Update />} />
           <Route path='/sobre' element={<About />} />
           <Route path='/*' element={<Page404 />} />
         </Routes>

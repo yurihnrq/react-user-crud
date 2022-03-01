@@ -13,19 +13,38 @@ const Home: React.FC = () => {
     return '';
   });
 
+  const fetchUsers = () => {
+    fetch('http://127.0.0.1:8000/api/user/info/' + info)
+      .then(async response => {
+        if (response.ok) {
+          setError(null);
+          return response.json();
+        } else throw new Error('Não foi possível contatar o servidor.');
+      })
+      .then(data => setUsers(data))
+      .catch(reason => setError(reason.message));
+    localStorage.setItem('userInfo', info);
+  };
+
+  const excludeUser = (userID: number) => {
+    setError(null);
+    fetch('http://127.0.0.1:8000/api/user/' + userID, {
+      method: 'DELETE'
+    })
+      .then(response => {
+        if (!response.ok) throw new Error('Usuário não encontrado.');
+        fetchUsers();
+      })
+      .catch(reason => {
+        console.error(reason.message);
+        setError(reason.message);
+      });
+  };
+
   useEffect(() => {
     if (info.length > 2) {
-      fetch('http://127.0.0.1:8000/api/user/info/' + info)
-        .then(async response => {
-          if (response.ok) {
-            setError(null);
-            return response.json();
-          } else throw new Error('Não foi possível contatar o servidor.');
-        })
-        .then(data => setUsers(data))
-        .catch(reason => setError(reason.message));
-      localStorage.setItem('userInfo', info);
-    }
+      fetchUsers();
+    } else setUsers([]);
   }, [info]);
 
   return (
@@ -43,7 +62,7 @@ const Home: React.FC = () => {
       </Form>
       {error !== null ? <Alert variant='danger'>{error}</Alert> : null}
       {users.length > 0 ? (
-        <UsersTable users={users} />
+        <UsersTable exclusionHandler={excludeUser} users={users} />
       ) : (
         <span style={{ maxWidth: 700 }} className='mx-auto d-block'>
           Insira uma informação válida no campo acima. ⬆️

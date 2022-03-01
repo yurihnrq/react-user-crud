@@ -1,3 +1,5 @@
+import User from '../core/User';
+
 const validateCPF = (cpf: string): boolean => {
   if (typeof cpf !== 'string') return false;
 
@@ -17,7 +19,7 @@ const validateCPF = (cpf: string): boolean => {
   return rest(10) === values[9] && rest(11) === values[10];
 };
 
-const validateSignupForm = (data: FormData): boolean => {
+export const validateUserForm = (data: FormData): boolean => {
   if (data.get('name') === '') return false;
 
   if (data.get('email') === '') return false;
@@ -38,5 +40,3 @@ const validateSignupForm = (data: FormData): boolean => {
 
   return true;
 };
-
-export default validateSignupForm;

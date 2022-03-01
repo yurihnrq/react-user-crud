@@ -1,20 +1,26 @@
 import React, { FormEventHandler, useState } from 'react';
 import { Form, Button, Alert, Container } from 'react-bootstrap';
+import User from '../core/User';
 import { cpfMask, phoneMask, removeMaskChars } from '../static/inputMask';
 import { validateUserForm } from '../static/formValidate';
 
-const SignupForm: React.FC = () => {
+interface UpdateFormProps {
+  user: User;
+}
+
+const UpdateForm: React.FC<UpdateFormProps> = ({ user }) => {
   const [fetching, setFetching] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
-  const [name, setName] = useState<string>('');
-  const [cpf, setCPF] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
-  const [note, setNote] = useState<string>('');
+  const [name, setName] = useState<string>(user.name);
+  const [cpf, setCPF] = useState<string>(cpfMask(user.cpf));
+  const [phone, setPhone] = useState<string>(phoneMask(user.phone));
+  const [email, setEmail] = useState<string>(user.email);
+  const [address, setAddress] = useState<string>(user.address);
+  const [note, setNote] = useState<string>(user.note);
 
   const resetHandler = () => {
+    setError(null);
     setName('');
     setCPF('');
     setPhone('');
@@ -38,7 +44,13 @@ const SignupForm: React.FC = () => {
 
         formData.append('cpf', cpfString);
         formData.append('phone', phoneString);
-        fetch('http://127.0.0.1:8000/api/user/', {
+        // Por questões de segurança, o PHP não permite FormData no método PUT.
+        // Entretanto, uma maneira de sanar esse problema, é fazendo uma
+        // requisição POST e passar um parâmetro chamado _method de valor PUT.
+        // Dese modo, o servidor interpretará a requisição como PUT e permitirá
+        // o uso de FormData.
+        formData.append('_method', 'PUT');
+        fetch('http://127.0.0.1:8000/api/user/' + user.id, {
           method: 'POST',
           body: formData
         })
@@ -55,7 +67,7 @@ const SignupForm: React.FC = () => {
             setError(null);
           })
           .catch(reason => {
-            setError('Erro ao realizar cadastro: ' + reason.message);
+            setError('Erro ao realizar alteração: ' + reason.message);
             setSuccess(false);
           });
       } else setError('Preencha os campos corretamente');
@@ -131,7 +143,7 @@ const SignupForm: React.FC = () => {
       </Form.Group>
       {error !== null ? <Alert variant='danger'>{error}</Alert> : null}
       {success ? (
-        <Alert variant='success'>Usuário cadastrado com sucesso.</Alert>
+        <Alert variant='success'>Usuário atualizado com sucesso.</Alert>
       ) : null}
       <Container fluid className='d-flex flex-column p-0'>
         <Button
@@ -140,7 +152,7 @@ const SignupForm: React.FC = () => {
           variant='success'
           className='mb-2'
         >
-          Cadastrar
+          Atualizar
         </Button>
         <Button
           disabled={fetching}
@@ -154,4 +166,4 @@ const SignupForm: React.FC = () => {
   );
 };
 
-export default SignupForm;
+export default UpdateForm;
