@@ -3,6 +3,7 @@ import { Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import User from '../core/User';
 import { cpfMask, phoneMask } from '../static/inputMask';
+import { EditIcon, TrashIcon } from './layout/Icons';
 
 interface UsersTableProps {
   users: User[];
@@ -45,7 +46,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, exclusionHandler }) => {
                       to={`/alterar/${user.id}`}
                       className='text-white text-decoration-none'
                     >
-                      Alterar
+                      <EditIcon color='#FFFFFF' height={25} width={25} />
                     </Link>
                   </Button>
                   <Button
@@ -53,7 +54,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, exclusionHandler }) => {
                     onClick={() => exclusionHandler(user.id)}
                     className='d-inline-block'
                   >
-                    Excluir
+                    <TrashIcon color='#FFFFFF' height={25} width={25} />
                   </Button>
                 </div>
               </td>

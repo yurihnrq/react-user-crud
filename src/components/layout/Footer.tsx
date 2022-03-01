@@ -28,6 +28,14 @@ const Footer: React.FC = () => {
             <Link className='text-white' to='/sobre'>
               Sobre
             </Link>
+            <a
+              target='_blank'
+              className='text-white'
+              href='https://github.com/yurihnrq'
+              rel='noreferrer'
+            >
+              Meu GitHub
+            </a>
           </Col>
         </Row>
       </Container>
