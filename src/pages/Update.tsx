@@ -6,10 +6,14 @@ import UpdateForm from '../components/UpdateForm';
 import { Alert } from 'react-bootstrap';
 
 const Update: React.FC = () => {
+  // useParams() retorna um objeto contendo os parâmetros
+  // recebidos pela URL.
   const { id } = useParams();
   const [error, setError] = useState<boolean | null>(false);
   const [user, setUser] = useState<User>();
 
+  // Função responsável por fazer a requisição na API e
+  // obter um usuário utilizando um ID.
   const fetchUser = (userID: string) => {
     fetch('http://127.0.0.1:8000/api/user/' + userID)
       .then(async response => {
@@ -29,6 +33,8 @@ const Update: React.FC = () => {
   };
 
   useEffect(() => {
+    // Assim que a página é carregada, se houver um ID válido,
+    // chama a função fetchUser().
     if (id) fetchUser(id);
   }, []);
 

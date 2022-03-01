@@ -7,12 +7,17 @@ import User from '../core/User';
 const Home: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
+  // Estado da informação que é utilizada para buscar usuários na API.
+  // Como guardo ele no localStorage, na hora de definir usu estado
+  // inicial, verifico se não há algum valor salvo localmente.
   const [info, setInfo] = useState<string>(() => {
     const storedValue = localStorage.getItem('userInfo');
     if (storedValue) return storedValue;
     return '';
   });
 
+  // Realiza a requisição na API para obter uma lista de usuários
+  // compatíveis com a informação fornecida.
   const fetchUsers = () => {
     fetch('http://127.0.0.1:8000/api/user/info/' + info)
       .then(async response => {
@@ -23,9 +28,12 @@ const Home: React.FC = () => {
       })
       .then(data => setUsers(data))
       .catch(reason => setError(reason.message));
+    // Salva a informação no localStorage.
     localStorage.setItem('userInfo', info);
   };
 
+  // Realiza a requisição na API para excluir um usuário com o ID
+  // recebido como parâmetro.
   const excludeUser = (userID: number) => {
     setError(null);
     fetch('http://127.0.0.1:8000/api/user/' + userID, {
@@ -40,8 +48,13 @@ const Home: React.FC = () => {
         setError(reason.message);
       });
   };
-
+  
+  // Sempre que o estado de info mudar, chama a função que
+  // realiza a requisição no servidor e obtém dados de usuários.
   useEffect(() => {
+    // Verifica se o comprimento da string de informação é maior que 2.
+    // Fiz dessa maneira para que haja uma especificidade maior na hora
+    // da pesquisa por usuários.
     if (info.length > 2) {
       fetchUsers();
     } else setUsers([]);
@@ -49,7 +62,11 @@ const Home: React.FC = () => {
 
   return (
     <Layout>
-      <Form style={{ maxWidth: 700 }} className='mx-auto'>
+      <Form
+        style={{ maxWidth: 700 }}
+        className='mx-auto'
+        onSubmit={e => e.preventDefault()}
+      >
         <Form.Group className='mb-3'>
           <Form.Label>Pesquise por um usuário</Form.Label>
           <Form.Control

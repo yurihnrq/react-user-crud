@@ -1,7 +1,12 @@
 import React, { FormEventHandler, useState } from 'react';
 import { Form, Button, Alert, Container } from 'react-bootstrap';
 import User from '../core/User';
-import { cpfMask, phoneMask, removeMaskChars } from '../static/inputMask';
+import {
+  cpfMask,
+  phoneMask,
+  nameMask,
+  removeMaskChars
+} from '../static/inputMask';
 import { validateUserForm } from '../static/formValidate';
 
 interface UpdateFormProps {
@@ -14,6 +19,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ user }) => {
   const [success, setSuccess] = useState<boolean>(false);
   const [name, setName] = useState<string>(user.name);
   const [cpf, setCPF] = useState<string>(cpfMask(user.cpf));
+  const [birth, setBirth] = useState<string>(user.birth);
   const [phone, setPhone] = useState<string>(phoneMask(user.phone));
   const [email, setEmail] = useState<string>(user.email);
   const [address, setAddress] = useState<string>(user.address);
@@ -23,6 +29,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ user }) => {
     setError(null);
     setName('');
     setCPF('');
+    setBirth('');
     setPhone('');
     setEmail('');
     setAddress('');
@@ -36,8 +43,11 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ user }) => {
     const form = document.querySelector('form');
 
     if (form) {
+      // Obtenho os dados do formulário no formato FormData.
       const formData = new FormData(form);
 
+      // Verifico se os dados estão corretos.
+      // Caso positivo, prossigo com a requisição.
       if (validateUserForm(formData)) {
         const cpfString = removeMaskChars(cpf);
         const phoneString = removeMaskChars(phone);
@@ -81,7 +91,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ user }) => {
         <Form.Label>Nome:</Form.Label>
         <Form.Control
           value={name}
-          onChange={({ target }) => setName(target.value)}
+          onChange={({ target }) => setName(nameMask(target.value))}
           name='name'
           type='text'
           placeholder='Ex: Yuri Henrique'
@@ -95,6 +105,16 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ user }) => {
           name='cpf'
           type='text'
           placeholder='Ex: 111.333.444-55'
+        />
+      </Form.Group>
+      <Form.Group className='mb-2'>
+        <Form.Label>Data de nascimento:</Form.Label>
+        <Form.Control
+          onChange={({ target }) => setBirth(target.value)}
+          value={birth}
+          name='birth'
+          type='date'
+          placeholder='dd-mm-yyyy'
         />
       </Form.Group>
       <Form.Group className='mb-2'>

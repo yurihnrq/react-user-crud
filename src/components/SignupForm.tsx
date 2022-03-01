@@ -1,6 +1,11 @@
 import React, { FormEventHandler, useState } from 'react';
 import { Form, Button, Alert, Container } from 'react-bootstrap';
-import { cpfMask, phoneMask, removeMaskChars } from '../static/inputMask';
+import {
+  cpfMask,
+  nameMask,
+  phoneMask,
+  removeMaskChars
+} from '../static/inputMask';
 import { validateUserForm } from '../static/formValidate';
 
 const SignupForm: React.FC = () => {
@@ -9,6 +14,7 @@ const SignupForm: React.FC = () => {
   const [success, setSuccess] = useState<boolean>(false);
   const [name, setName] = useState<string>('');
   const [cpf, setCPF] = useState<string>('');
+  const [birth, setBirth] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [address, setAddress] = useState<string>('');
@@ -17,6 +23,7 @@ const SignupForm: React.FC = () => {
   const resetHandler = () => {
     setName('');
     setCPF('');
+    setBirth('');
     setPhone('');
     setEmail('');
     setAddress('');
@@ -30,14 +37,18 @@ const SignupForm: React.FC = () => {
     const form = document.querySelector('form');
 
     if (form) {
+      // Obtenho os dados do formulário no formato FormData.
       const formData = new FormData(form);
 
+      // Verifico se os dados estão corretos.
+      // Caso positivo, prossigo com a requisição.
       if (validateUserForm(formData)) {
         const cpfString = removeMaskChars(cpf);
         const phoneString = removeMaskChars(phone);
 
         formData.append('cpf', cpfString);
         formData.append('phone', phoneString);
+        console.log(new Date(birth));
         fetch('http://127.0.0.1:8000/api/user/', {
           method: 'POST',
           body: formData
@@ -69,7 +80,7 @@ const SignupForm: React.FC = () => {
         <Form.Label>Nome:</Form.Label>
         <Form.Control
           value={name}
-          onChange={({ target }) => setName(target.value)}
+          onChange={({ target }) => setName(nameMask(target.value))}
           name='name'
           type='text'
           placeholder='Ex: Yuri Henrique'
@@ -83,6 +94,16 @@ const SignupForm: React.FC = () => {
           name='cpf'
           type='text'
           placeholder='Ex: 111.333.444-55'
+        />
+      </Form.Group>
+      <Form.Group className='mb-2'>
+        <Form.Label>Data de nascimento:</Form.Label>
+        <Form.Control
+          onChange={({ target }) => setBirth(target.value)}
+          value={birth}
+          name='birth'
+          type='date'
+          placeholder='dd-mm-yyyy'
         />
       </Form.Group>
       <Form.Group className='mb-2'>
